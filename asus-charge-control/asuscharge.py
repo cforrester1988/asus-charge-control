@@ -4,10 +4,10 @@ from platform import system, release
 from subprocess import run
 
 
-MIN_KERNEL_VERSION = 5.4
-ASUS_MODULE_NAME = "asus_nb_wmi"
-PS_PATH = "/sys/class/power_supply/"
-CHARGE_FILE = "/charge_control_end_threshold"
+_MIN_KERNEL_VERSION = 5.4
+_ASUS_MODULE_NAME = "asus_nb_wmi"
+_PS_PATH = "/sys/class/power_supply/"
+_CHARGE_FILE = "/charge_control_end_threshold"
 
 
 def supported_platform() -> bool:
@@ -15,11 +15,11 @@ def supported_platform() -> bool:
 
 
 def supported_kernel() -> bool:
-    return float(release()[0:3]) >= MIN_KERNEL_VERSION
+    return float(release()[0:3]) >= _MIN_KERNEL_VERSION
 
 
 def module_loaded() -> bool:
-    return ASUS_MODULE_NAME in run(["lsmod"], capture_output=True).stdout.decode()
+    return _ASUS_MODULE_NAME in run(["lsmod"], capture_output=True).stdout.decode()
 
 
 class ChargeThresholdController:
@@ -27,13 +27,15 @@ class ChargeThresholdController:
         from os import walk
         from re import compile
 
-        BAT_RE = compile("(BAT)[0-9T]")
+        _BAT_RE = compile("(BAT)[0-9T]")
         self._bat_path: str = ""
-        for _, dirs, _ in walk(PS_PATH):
+        for _, dirs, _ in walk(_PS_PATH):
             for dir in dirs:
-                if BAT_RE.fullmatch(dir):
-                    self._bat_path = f"{PS_PATH}{dir}{CHARGE_FILE}"
+                if _BAT_RE.fullmatch(dir):
+                    self._bat_path = f"{_PS_PATH}{dir}{_CHARGE_FILE}"
                     break
+        if self._bat_path == "":
+            raise Exception("Unable to find battery.")
 
     def __str__(self) -> str:
         return f"<AsusChargeThresholdController: charge_control_end_threshold={self.end_threshold}>"
@@ -77,15 +79,15 @@ if __name__ == "__main__":
         exit()
     if not supported_kernel():
         print(
-            f"{argv[0]} requires a kernel version >= {MIN_KERNEL_VERSION}. Detected version {release()}."
+            f"{argv[0]} requires a kernel version >= {_MIN_KERNEL_VERSION}. Detected version {release()}."
         )
         exit()
     if not module_loaded():
         print(
             (
-                f"Kernel module '{ASUS_MODULE_NAME}' is not loaded. Try running "
-                f"'modprobe {ASUS_MODULE_NAME}' and then 'lsmod | grep "
-                f"{ASUS_MODULE_NAME}' to verify the module has loaded."
+                f"Kernel module '{_ASUS_MODULE_NAME}' is not loaded. Try running "
+                f"'modprobe {_ASUS_MODULE_NAME}' and then 'lsmod | grep "
+                f"{_ASUS_MODULE_NAME}' to verify the module has loaded."
             )
         )
         exit()
