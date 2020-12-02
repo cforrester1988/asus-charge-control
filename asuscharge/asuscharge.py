@@ -22,6 +22,60 @@ def module_loaded() -> bool:
     return _ASUS_MODULE_NAME in run(["lsmod"], capture_output=True).stdout.decode()
 
 
+def main() -> None:
+    from argparse import ArgumentParser
+    from sys import argv, exit
+
+    cc = ChargeThresholdController()
+    parser = ArgumentParser(
+        description=(
+            "Get or set the current battery charge end threshold on an ASUS notebook. "
+            "When the notebook's battery reaches the charge threshold, it will stop charging the battery."
+        )
+    )
+    parser.add_argument(
+        "max",
+        nargs="?",
+        type=int,
+        default=None,
+        help="set the battery's charge threshold",
+    )
+    if not supported_platform():
+        print(f"{argv[0]} only runs on Linux systems.")
+        exit()
+    if not supported_kernel():
+        print(
+            f"{argv[0]} requires a kernel version >= {_MIN_KERNEL_VERSION}. Detected version {release()}."
+        )
+        exit()
+    if not module_loaded():
+        print(
+            (
+                f"Kernel module '{_ASUS_MODULE_NAME}' is not loaded. Try running "
+                f"'modprobe {_ASUS_MODULE_NAME}' and then 'lsmod | grep "
+                f"{_ASUS_MODULE_NAME}' to verify the module has loaded."
+            )
+        )
+        exit()
+    args = parser.parse_args()
+    if not args.max:
+        print(f"Current charge threshold: {cc.end_threshold}%")
+    else:
+        try:
+            cc.end_threshold = int(args.max)
+            if cc.end_threshold == int(args.max):
+                print(f"Successfully set charge threshold to {cc.end_threshold}%")
+            else:
+                print(f"Unable to set charge threshold.")
+        except PermissionError:
+            print(
+                (
+                    f"Unable to set charge threshold. Try running with root "
+                    f"privileges: 'sudo {argv[0]} {args.max}'."
+                )
+            )
+
+
 class ChargeThresholdController:
     def __init__(self) -> None:
         from os import walk
@@ -57,54 +111,4 @@ class ChargeThresholdController:
 
 
 if __name__ == "__main__":
-    from argparse import ArgumentParser
-    from sys import argv, exit
-
-    cc = ChargeThresholdController()
-    parser = ArgumentParser(
-        description=(
-            "Get or set the current battery charge end threshold on an ASUS notebook. "
-            "When the notebook's battery reaches the charge end threshold, it will stop charging the battery."
-        )
-    )
-    parser.add_argument(
-        "max",
-        nargs="?",
-        type=int,
-        default=None,
-        help="set the battery's charge end threshold",
-    )
-    if not supported_platform():
-        print(f"{argv[0]} only runs on Linux systems.")
-        exit()
-    if not supported_kernel():
-        print(
-            f"{argv[0]} requires a kernel version >= {_MIN_KERNEL_VERSION}. Detected version {release()}."
-        )
-        exit()
-    if not module_loaded():
-        print(
-            (
-                f"Kernel module '{_ASUS_MODULE_NAME}' is not loaded. Try running "
-                f"'modprobe {_ASUS_MODULE_NAME}' and then 'lsmod | grep "
-                f"{_ASUS_MODULE_NAME}' to verify the module has loaded."
-            )
-        )
-        exit()
-    args = parser.parse_args()
-    if not args.max:
-        print(f"Current charge end threshold: {cc.end_threshold}%")
-    else:
-        try:
-            cc.end_threshold = int(args.max)
-            if cc.end_threshold == int(args.max):
-                print(f"Successfully set charge end threshold to {cc.end_threshold}%")
-            else:
-                print(f"Unable to set charge end threshold.")
-        except PermissionError:
-            print(
-                (
-                    f"Unable to set charge end threshold. Try running with root "
-                    f"privileges: 'sudo {argv[0]} {args.max}'."
-                )
-            )
+    main()
