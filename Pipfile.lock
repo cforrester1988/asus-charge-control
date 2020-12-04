@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "f4f56a49458858361a49579dc6d279ec9fdbeac9459c1f16d0a941dd1ee62ce9"
+            "sha256": "7be3c4342df5f6b9161d1c6cfc6391a38e00b1a16c2c3ac5c2430072ff7c741b"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -15,7 +15,12 @@
             }
         ]
     },
-    "default": {},
+    "default": {
+        "e1839a8": {
+            "editable": true,
+            "path": "."
+        }
+    },
     "develop": {
         "appdirs": {
             "hashes": [
@@ -41,10 +46,10 @@
         },
         "click": {
             "hashes": [
-                "sha256:d2b5255c7c6349bc1bd1e59e08cd12acbbd63ce649f2588755783aa94dfb6b1a",
-                "sha256:dacca89f4bfadd5de3d7489b7c8a566eee0d3676333fbb50030263894c38c0dc"
+                "sha256:681c9380a24b22fec089c8e5ffe40aa16a0da79f248a26fe2481bfa8170bfcc1",
+                "sha256:e4315a188403c0258bbc4a4e31863e48fc301c4e95b8007a8eeda0391158df13"
             ],
-            "version": "==7.1.2"
+            "version": "==8.0.0a1"
         },
         "gitdb": {
             "hashes": [
@@ -80,6 +85,14 @@
                 "sha256:b236cde0ac9a6aedd5e3c34517b423cd4fd97ef723849da6b0d2231142d89c00"
             ],
             "version": "==5.5.1"
+        },
+        "pep517": {
+            "hashes": [
+                "sha256:3985b91ebf576883efe5fa501f42a16de2607684f3797ddba7202b71b7d0da51",
+                "sha256:aeb78601f2d1aa461960b43add204cc7955667687fbcf9cdb5170f00556f117f"
+            ],
+            "index": "pypi",
+            "version": "==0.9.1"
         },
         "pyyaml": {
             "hashes": [
