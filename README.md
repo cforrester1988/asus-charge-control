@@ -37,8 +37,8 @@ As root privileges are necessary to set the charge end threshold, asus-charge-co
 ```console
 sudo pip install --system asus-charge-control
 ```
-**DANGER:** Normally, Python packages should not be installed with ```sudo```, as they may execute arbitrary code. I encourage you to read ```setup.py``` before installation.
 
+**DANGER:** Normally, Python packages should not be installed with ```sudo```, as they may execute arbitrary code. I encourage you to read ```setup.py``` before installation.
 
 ## Usage
 
@@ -85,5 +85,5 @@ You can use the ```asuscharge``` package in your own applications. The package o
 
 ## Version history
 
-* 1.0.0
-  * Initial release.
+- 1.0.0
+  - Initial release.
