@@ -85,5 +85,8 @@ You can use the ```asuscharge``` package in your own applications. The package o
 
 ## Version history
 
+- 1.0.1
+  - (fix) supported_kernel() returned an incorrect value for Linux kernel versions > 5.9
+
 - 1.0.0
   - Initial release.

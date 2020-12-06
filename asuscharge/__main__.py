@@ -5,7 +5,7 @@ from ._version import __version__
 from platform import system, release
 from subprocess import run
 
-_MIN_KERNEL_VERSION = 5.4
+_MIN_KERNEL_VERSION = [5, 4]
 _ASUS_MODULE_NAME = "asus_nb_wmi"
 _PS_PATH = "/sys/class/power_supply/"
 _CHARGE_FILE = "/charge_control_end_threshold"
@@ -26,7 +26,7 @@ def supported_kernel() -> bool:
     Returns:
         bool: true if kernel is supported, else false
     """
-    return float(release()[0:3]) >= _MIN_KERNEL_VERSION
+    return [int(x) for x in release().split(".")[0:2]] >= _MIN_KERNEL_VERSION
 
 
 def module_loaded() -> bool:
