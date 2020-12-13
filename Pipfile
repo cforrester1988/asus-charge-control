@@ -17,6 +17,7 @@ allow_prereleases = true
 
 [packages]
 pygobject = "*"
+elevate = "*"
 
 [packages.e1839a8]
 path = "."

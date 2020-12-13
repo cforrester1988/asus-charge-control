@@ -1,25 +1,55 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.38.2 -->
+<!-- Generated with glade 3.38.2 
+
+Copyright (C) Copyright © 2020 Christopher Forrester
+
+This file is part of Battery Charge Control.
+
+Battery Charge Control is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Battery Charge Control is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with Battery Charge Control.  If not, see <http://www.gnu.org/licenses/>.
+
+Author: Christopher Forrester
+
+-->
 <interface>
-  <requires lib="gtk+" version="3.24"/>
-  <object class="GtkImage" id="AboutIcon">
-    <property name="visible">True</property>
-    <property name="can-focus">False</property>
-    <property name="icon-name">dialog-information</property>
-    <property name="icon_size">2</property>
+  <requires lib="gtk+" version="3.22"/>
+  <!-- interface-license-type gplv3 -->
+  <!-- interface-name Battery Charge Control -->
+  <!-- interface-description Set your recent ASUS notebook's maximum charge level. -->
+  <!-- interface-copyright Copyright \302\251 2020 Christopher Forrester -->
+  <!-- interface-authors Christopher Forrester -->
+  <object class="GtkAdjustment" id="ChargeAdjustment">
+    <property name="lower">60</property>
+    <property name="upper">100</property>
+    <property name="value">100</property>
+    <property name="step-increment">1</property>
+    <property name="page-increment">10</property>
   </object>
   <object class="GtkAboutDialog" id="AboutWindow">
     <property name="can-focus">False</property>
     <property name="window-position">center-on-parent</property>
     <property name="icon-name">battery</property>
     <property name="type-hint">dialog</property>
+    <property name="transient-for">MainWindow</property>
+    <property name="attached-to">MainWindow</property>
     <property name="program-name">Battery Charge Control</property>
-    <property name="comments" translatable="yes">for ASUS notebooks</property>
+    <property name="copyright" translatable="yes">Copyright © 2020 Christopher Forrester</property>
+    <property name="comments" translatable="yes">Charge limiter for ASUS notebooks</property>
     <property name="website">https://github.com/cforrester1988/asus-charge-control</property>
     <property name="license" translatable="yes">This program comes with absolutely no warranty.
 See the &lt;a href="https://www.gnu.org/licenses/gpl-3.0.html"&gt;GNU General Public License, version 3 or later&lt;/a&gt; for details.</property>
     <property name="authors">Christopher Forrester — christopher@cforrester.ca&lt;christopher@cforrester.ca&gt;</property>
-    <property name="logo-icon-name">battery</property>
+    <property name="logo-icon-name">battery-good-charging</property>
     <property name="wrap-license">True</property>
     <property name="license-type">gpl-3-0</property>
     <child internal-child="vbox">
@@ -38,40 +68,124 @@ See the &lt;a href="https://www.gnu.org/licenses/gpl-3.0.html"&gt;GNU General Pu
       </object>
     </child>
   </object>
-  <object class="GtkAdjustment" id="ChargeAdjustment">
-    <property name="lower">60</property>
-    <property name="upper">100</property>
-    <property name="value">100</property>
-    <property name="step-increment">1</property>
-    <property name="page-increment">10</property>
-  </object>
-  <object class="GtkWindow" id="MainWindow">
+  <object class="GtkPopover" id="MainMenu">
     <property name="can-focus">False</property>
-    <property name="border-width">6</property>
-    <property name="resizable">False</property>
-    <property name="icon-name">battery</property>
+    <property name="relative-to">MenuButton</property>
     <child>
       <object class="GtkBox">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
-        <property name="margin-start">6</property>
-        <property name="margin-end">6</property>
-        <property name="margin-top">6</property>
-        <property name="margin-bottom">6</property>
+        <property name="orientation">vertical</property>
         <child>
-          <object class="GtkScale" id="ChargeScale">
+          <object class="GtkButton" id="AboutButton">
+            <property name="label" translatable="yes">About B.C.C.</property>
             <property name="visible">True</property>
             <property name="can-focus">True</property>
-            <property name="orientation">vertical</property>
-            <property name="adjustment">ChargeAdjustment</property>
-            <property name="inverted">True</property>
-            <property name="round-digits">0</property>
-            <property name="digits">0</property>
-            <property name="value-pos">left</property>
+            <property name="receives-default">True</property>
           </object>
           <packing>
             <property name="expand">False</property>
-            <property name="fill">False</property>
+            <property name="fill">True</property>
+            <property name="pack-type">end</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <placeholder/>
+        </child>
+      </object>
+    </child>
+  </object>
+  <object class="GtkWindow" id="MainWindow">
+    <property name="can-focus">False</property>
+    <property name="icon-name">battery-good-charging-symbolic</property>
+    <signal name="destroy" handler="onMainDestroy" swapped="no"/>
+    <child>
+      <object class="GtkBox">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="orientation">vertical</property>
+        <child>
+          <object class="GtkInfoBar" id="UnlockInfoBar">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="margin-bottom">6</property>
+            <child internal-child="action_area">
+              <object class="GtkButtonBox">
+                <property name="can-focus">False</property>
+                <property name="margin-end">3</property>
+                <property name="spacing">6</property>
+                <child>
+                  <object class="GtkButton" id="UnlockButton">
+                    <property name="label" translatable="yes">Unlock...</property>
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">False</property>
+                    <property name="tooltip-text" translatable="yes">Dialogue is locked.
+Click to make changes.</property>
+                    <property name="halign">center</property>
+                    <property name="valign">center</property>
+                  </object>
+                  <packing>
+                    <property name="expand">True</property>
+                    <property name="fill">True</property>
+                    <property name="pack-type">end</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="pack-type">end</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child internal-child="content_area">
+              <object class="GtkBox">
+                <property name="can-focus">False</property>
+                <property name="margin-top">3</property>
+                <property name="margin-bottom">3</property>
+                <property name="spacing">8</property>
+                <child>
+                  <object class="GtkImage" id="LockIcon">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="margin-start">2</property>
+                    <property name="margin-end">2</property>
+                    <property name="icon-name">changes-prevent-symbolic</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="LockExplanationLabel">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="label" translatable="yes">&lt;b&gt;Unlock to Change Settings&lt;/b&gt;
+Authentication is necessary to modify system settings.</property>
+                    <property name="use-markup">True</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
             <property name="position">0</property>
           </packing>
         </child>
@@ -79,81 +193,141 @@ See the &lt;a href="https://www.gnu.org/licenses/gpl-3.0.html"&gt;GNU General Pu
           <object class="GtkBox">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
-            <property name="margin-start">4</property>
-            <property name="orientation">vertical</property>
+            <property name="margin-end">6</property>
+            <property name="margin-bottom">6</property>
             <child>
-              <object class="GtkLabel">
+              <object class="GtkScale" id="ChargeScale">
                 <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="halign">start</property>
-                <property name="margin-top">4</property>
-                <property name="label" translatable="yes">Full Capacity</property>
+                <property name="sensitive">False</property>
+                <property name="can-focus">True</property>
+                <property name="margin-start">6</property>
+                <property name="orientation">vertical</property>
+                <property name="adjustment">ChargeAdjustment</property>
+                <property name="inverted">True</property>
+                <property name="show-fill-level">True</property>
+                <property name="round-digits">0</property>
+                <property name="digits">0</property>
+                <property name="value-pos">left</property>
               </object>
               <packing>
                 <property name="expand">False</property>
-                <property name="fill">True</property>
+                <property name="fill">False</property>
                 <property name="position">0</property>
               </packing>
             </child>
             <child>
-              <object class="GtkLabel">
+              <object class="GtkBox" id="ChargeLabelBox">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="halign">start</property>
-                <property name="valign">end</property>
-                <property name="vexpand">True</property>
-                <property name="label" translatable="yes">Balanced</property>
+                <property name="margin-start">6</property>
+                <property name="orientation">vertical</property>
+                <child>
+                  <object class="GtkLabel" id="FullCapacityLabel">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="halign">start</property>
+                    <property name="margin-top">4</property>
+                    <property name="label" translatable="yes">Full Capacity</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="BalancedLabel">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="halign">start</property>
+                    <property name="valign">end</property>
+                    <property name="vexpand">True</property>
+                    <property name="label" translatable="yes">Balanced</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="BetterLifespanLabel">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="halign">start</property>
+                    <property name="valign">end</property>
+                    <property name="margin-bottom">4</property>
+                    <property name="vexpand">True</property>
+                    <property name="label" translatable="yes">Better Lifespan</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">2</property>
+                  </packing>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
-                <property name="fill">True</property>
+                <property name="fill">False</property>
                 <property name="position">1</property>
               </packing>
             </child>
             <child>
-              <object class="GtkLabel">
+              <object class="GtkBox">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="halign">start</property>
-                <property name="valign">end</property>
-                <property name="margin-bottom">4</property>
-                <property name="vexpand">True</property>
-                <property name="label" translatable="yes">Better Lifespan</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">2</property>
-              </packing>
-            </child>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">False</property>
-            <property name="position">1</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkLabel">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="margin-start">8</property>
-            <property name="label" translatable="yes">You can help prolong the useful life of your notebook's battery by limiting how much of its capacity you use. Keeping it fully charged all of the time, or frequently letting it fall below 25%, will cause extra wear on the battery.
+                <property name="orientation">vertical</property>
+                <child>
+                  <object class="GtkLabel" id="ChargeExplanationLabel">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="valign">start</property>
+                    <property name="margin-bottom">6</property>
+                    <property name="xpad">8</property>
+                    <property name="label" translatable="yes">You can help prolong the useful life of your notebook's battery by limiting how much of its capacity you use. Keeping it fully charged all of the time, or frequently letting it fall below 25%, will cause extra wear on the battery.
 
 Set the limit to 60% if you plan to leave your notebook attached to its charger most of the time. This will cause the least amount of wear on the battery.
 
 Set the limit up to 80% when you know you only need to be away from a power source for a few hours, such as during meetings or in class.
 
 Set the limit up to 100% when you know you'll be away from a power source for a long time, to use up to the battery's full capacity.</property>
-            <property name="wrap">True</property>
-            <property name="width-chars">45</property>
-            <property name="max-width-chars">50</property>
+                    <property name="wrap">True</property>
+                    <property name="width-chars">60</property>
+                    <property name="max-width-chars">60</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="WarningLabel">
+                    <property name="can-focus">False</property>
+                    <property name="valign">start</property>
+                    <property name="label" translatable="yes">&lt;small&gt;&lt;b&gt;Note:&lt;/b&gt; Some notebook models only support values of precisely 60, 80, or 100.&lt;/small&gt;</property>
+                    <property name="use-markup">True</property>
+                  </object>
+                  <packing>
+                    <property name="expand">True</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
+                <property name="padding">8</property>
+                <property name="position">2</property>
+              </packing>
+            </child>
           </object>
           <packing>
             <property name="expand">False</property>
             <property name="fill">True</property>
-            <property name="pack-type">end</property>
-            <property name="position">2</property>
+            <property name="position">1</property>
           </packing>
         </child>
       </object>
@@ -164,18 +338,40 @@ Set the limit up to 100% when you know you'll be away from a power source for a 
         <property name="can-focus">False</property>
         <property name="valign">start</property>
         <property name="title" translatable="yes">Battery Charge Control</property>
-        <property name="subtitle" translatable="yes">for ASUS notebooks</property>
+        <property name="subtitle" translatable="yes">Charge limiter for ASUS notebooks</property>
         <property name="show-close-button">True</property>
         <child>
-          <object class="GtkButton" id="AboutButton">
+          <object class="GtkButton" id="SchedulerButton">
+            <property name="label" translatable="yes">Scheduler...</property>
             <property name="visible">True</property>
+            <property name="sensitive">False</property>
             <property name="can-focus">True</property>
             <property name="receives-default">True</property>
-            <property name="image">AboutIcon</property>
-            <property name="always-show-image">True</property>
+          </object>
+          <packing>
+            <property name="position">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkMenuButton" id="MenuButton">
+            <property name="visible">True</property>
+            <property name="can-focus">True</property>
+            <property name="has-focus">True</property>
+            <property name="is-focus">True</property>
+            <property name="focus-on-click">False</property>
+            <property name="receives-default">True</property>
+            <property name="popover">MainMenu</property>
+            <child>
+              <object class="GtkImage">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="icon-name">open-menu-symbolic</property>
+              </object>
+            </child>
           </object>
           <packing>
             <property name="pack-type">end</property>
+            <property name="position">2</property>
           </packing>
         </child>
       </object>

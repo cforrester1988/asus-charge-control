@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "6eb9a587abb1dbcd10c757cb865eef918af7229916a307b49939f99066fe0514"
+            "sha256": "43002474a52c3691a9bb5eb6aa7da79936d59e6e8b3e1e684ef99387002cacfd"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -19,6 +19,13 @@
         "e1839a8": {
             "editable": true,
             "path": "."
+        },
+        "elevate": {
+            "hashes": [
+                "sha256:53ad19fa1de301fb1de3f8768fb3a5894215716fd96a475690c4d0ff3b1de209"
+            ],
+            "index": "pypi",
+            "version": "==0.1.3"
         },
         "pycairo": {
             "hashes": [
