@@ -58,6 +58,9 @@ def main() -> None:
         help="set the battery's charge threshold",
     )
     parser.add_argument(
+        "-f", "--force", action="store_true", help="forcibly set thresholds below 60"
+    )
+    parser.add_argument(
         "-v", "--version", action="version", version=f"%(prog)s {__version__}"
     )
     if not supported_platform():
@@ -80,7 +83,16 @@ def main() -> None:
     args = parser.parse_args()
     if not args.max:
         print(f"Current charge threshold: {cc.end_threshold}%")
+    elif args.max > 100:
+        print(
+            f"Unable to set charge threshold. Enter a valid threshold between 60-100."
+        )
     else:
+        if args.max < 60 and not args.force:
+            print(
+                f"It is not recommended to set a charge threshold lower than 60%! You can force a lower threshold with '{argv[0]} --force {args.max}'."
+            )
+            exit()
         try:
             cc.end_threshold = int(args.max)
             if cc.end_threshold == int(args.max):

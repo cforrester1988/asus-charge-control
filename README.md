@@ -85,8 +85,12 @@ You can use the ```asuscharge``` package in your own applications. The package o
 
 ## Version history
 
-- 1.0.1
-  - (fix) supported_kernel() returned an incorrect value for Linux kernel versions > 5.9
+- 1.0.2 (2020-12-28)
+  - (fix) ```MAX``` wasn't properly range checked for a value between 60-100.
+  - (feature) added ```--force``` to set a threshold value beneath 60.
 
-- 1.0.0
+- 1.0.1 (2020-12-06)
+  - (fix) supported_kernel() returned an incorrect value for Linux kernel versions > 5.9.
+
+- 1.0.0 (2020-12-04)
   - Initial release.
