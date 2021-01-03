@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from ._version import __version__
+from asuscharge._version import __version__
 
 from platform import system, release
 from subprocess import run
