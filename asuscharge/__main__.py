@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from ._version import __version__
+from asuscharge._version import __version__
 
 from platform import system, release
 from subprocess import run
@@ -122,13 +122,13 @@ class ChargeThresholdController:
         from re import compile
 
         _BAT_RE = compile("(BAT)[0-9T]")
-        self._bat_path: str = ""
+        self.bat_path: str = ""
         for _, dirs, _ in walk(_PS_PATH):
             for dir in dirs:
                 if _BAT_RE.fullmatch(dir):
-                    self._bat_path = f"{_PS_PATH}{dir}{_CHARGE_FILE}"
+                    self.bat_path = f"{_PS_PATH}{dir}{_CHARGE_FILE}"
                     break
-        if self._bat_path == "":
+        if self.bat_path == "":
             raise Exception("Unable to find battery.")
 
     def __str__(self) -> str:
@@ -144,7 +144,7 @@ class ChargeThresholdController:
         Returns:
             int: current charge threshold.
         """
-        with open(self._bat_path, "r") as f:
+        with open(self.bat_path, "r") as f:
             return int(f.read())
 
     @end_threshold.setter
@@ -157,7 +157,7 @@ class ChargeThresholdController:
         Returns:
             bool: true if set successfully.
         """
-        with open(self._bat_path, "w") as f:
+        with open(self.bat_path, "w") as f:
             w = f.write(str(value))
             f.flush()
             return bool(w)

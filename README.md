@@ -85,6 +85,11 @@ You can use the ```asuscharge``` package in your own applications. The package o
 
 ## Version history
 
+- 1.0.3 (2021-01-03)
+  - (change) changed relative module imports to absolute imports
+  - (change) exposed bat_path on ChargeThresholdController for asuscharge-gtk
+  - (change) Pipfile updated to Python 3.9
+
 - 1.0.2 (2020-12-28)
   - (fix) ```MAX``` wasn't properly range checked for a value between 60-100.
   - (feature) added ```--force``` to set a threshold value beneath 60.
